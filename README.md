@@ -26,9 +26,11 @@ python kaas.py -h
 -g	custom organisms list file(opt)
 -t	protein or nucleic(p,n) Default:p
 -o	output file Default:results
---justformat	just format result.gmt and result.stat.change,not execute kegg(y,n) Default:n
+--justformat 
+just format result.gmt and result.stat.change,not execute kegg(y,n) Default:n
 
 example:
+
 kaas.py -f t.fasta -t p -n test -m test@126.com -l fungi -w b --justformat n -o test
 
 kaas.py -f t.fasta -t p -n test -m test@126.com -g org.txt -w b --justformat n -o test
