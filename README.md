@@ -10,7 +10,7 @@
 ```
 git clone git@github.com:PEHGP/kaas.git
 ```
-if you don't install git.You can download PhosphoRice [here](https://github.com/PEHGP/kaas/archive/master.zip).
+if you don't install git.You can download kaas[here](https://github.com/PEHGP/kaas/archive/master.zip).
 
 ###How to use   
 ```
@@ -21,15 +21,17 @@ python kaas.py -h
 -n	Mission name Default:query
 -m	E-mail #requires
 -l	organisms list(fungi,gene,euk,pro) Default:fungi
--w	Assignment method(b:BBH(bi-directional best hit),s:SBH(single-directional best hit)) Default:b
+-w	Assignment method(b:BBH(bi-directional best hit),
+		s:SBH(single-directional best hit)) Default:b
 -g	custom organisms list file(opt)
 -t	protein or nucleic(p,n) Default:p
 -o	output file Default:results
---justformat	just do format result.gmt and result.stat.change,not do kegg(y,n) Default:n
+--justformat	just format result.gmt and result.stat.change,not execute kegg(y,n) Default:n
 
-example:kaas.py -f t.fasta -t p -n test -m test@126.com -l fungi -w b --justformat n -o test
+example:
+kaas.py -f t.fasta -t p -n test -m test@126.com -l fungi -w b --justformat n -o test
 
-				kaas.py -f t.fasta -t p -n test -m test@126.com -g org.txt -w b --justformat n -o test
+kaas.py -f t.fasta -t p -n test -m test@126.com -g org.txt -w b --justformat n -o test
 
 just do format:kaas.py --justformat y -o result
 

@@ -135,7 +135,7 @@ if __name__=="__main__":
 		print "-g\tcustom organisms list file(opt)"
 		print "-t\tprotein or nucleic(p,n) Default:p"
 		print "-o\toutput file Default:results"
-		print "--justformat\tjust do format result.gmt and result.stat.change,not do kegg(y,n) Default:n\n"
+		print "--justformat\tjust format result.gmt and result.stat.change,not execute kegg(y,n) Default:n\n"
 		print "example:kaas.py -f t.fasta -t p -n test -m test@126.com -l fungi -w b --justformat n -o test\n\n\tkaas.py -f t.fasta -t p -n test -m test@126.com -g org.txt -w b --justformat n -o test\n\njust do format:kaas.py --justformat y -o result\n"
 		print "Note:custom organisms list file must have one line like this:hsa, dme, cel, ath\n\n\tthe final result are test.stat, test.tar.gz,test.gmt,test.stat.change\n"
 		sys.exit()
