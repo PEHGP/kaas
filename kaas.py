@@ -127,15 +127,15 @@ class CurlWeb:
 if __name__=="__main__":
 	def KaasOption():
 		print "\n-h\thelp"
-		print "-f\tfasta file #!!"
-		print "-n\tMission name DF:query"
-		print "-m\tE-mail DF:ngsplatform@163.com"
-		print "-l\torganisms list(fungi,gene,euk,pro) DF:fungi"
-		print "-w\tAssignment method(b:BBH(bi-directional best hit),s:SBH(single-directional best hit)) DF:b"
+		print "-f\tfasta file #requires"
+		print "-n\tMission name Default:query"
+		print "-m\tE-mail #requires"
+		print "-l\torganisms list(fungi,gene,euk,pro) Default:fungi"
+		print "-w\tAssignment method(b:BBH(bi-directional best hit),s:SBH(single-directional best hit)) Default:b"
 		print "-g\tcustom organisms list file(opt)"
-		print "-t\tprotein or nucleic(p,n) DF:p"
-		print "-o\toutput file DF:results"
-		print "--justformat\tjust do format result.gmt and result.stat.change,not do kegg(y,n) DF:n\n"
+		print "-t\tprotein or nucleic(p,n) Default:p"
+		print "-o\toutput file Default:results"
+		print "--justformat\tjust do format result.gmt and result.stat.change,not do kegg(y,n) Default:n\n"
 		print "example:kaas.py -f t.fasta -t p -n test -m test@126.com -l fungi -w b --justformat n -o test\n\n\tkaas.py -f t.fasta -t p -n test -m test@126.com -g org.txt -w b --justformat n -o test\n\njust do format:kaas.py --justformat y -o result\n"
 		print "Note:custom organisms list file must have one line like this:hsa, dme, cel, ath\n\n\tthe final result are test.stat, test.tar.gz,test.gmt,test.stat.change\n"
 		sys.exit()
@@ -145,7 +145,7 @@ if __name__=="__main__":
 		KaasOption()
 	FastaFile=""
 	MissionName="query"
-	Email="ngsplatform@163.com"
+	Email=""
 	Org="fungi"
 	Way="b"
 	OutPut="results"
@@ -168,6 +168,9 @@ if __name__=="__main__":
 		elif name=="-m":
 			if value!="":
 				Email=value
+			else:
+				print "Email is empty"
+				KaasOption()
 		elif name=="-l":
 			if not value in ["fungi","gene","euk","pro"]:
 				print "-l must be gene,euk,pro or fungi"
