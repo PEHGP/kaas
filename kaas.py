@@ -3,20 +3,23 @@ from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 import urllib2,urllib,re,time,getopt,sys,BeautifulSoup,os
 class CurlWeb:
-	def __init__(self):
+	def __init__(self,Mail="ngsplatform@163.com",jobid="no",ResultFileName="Results"):
 		self.fungi="sce, ago, kla, ppa, vpo, cgr, dha, pic, lel, cal, yli, ncr, mgr, fgr, ssl, bfu, ani, afm, aor, ang, pcs, cpw, ure, tml, spo, cne, ppl, mpr, uma, mgl, ecu"
 		self.gene="hsa, dme, cel, ath, sce, cho, eco, nme, hpy, rpr, bsu, lla, cac, mge, mtu, ctr, bbu, syn, bth, dra, aae, mja, ape"
 		self.euk="hsa, mmu, rno, dre, dme, cel, ath, sce, ago, cal, spo, ecu, pfa, cho, ehi, eco, nme, hpy, bsu, lla, mge, mtu, syn, aae, mja, ape"
 		self.pro="hsa, dme, ath, sce, pfa, eco, sty, hin, pae, nme, hpy, rpr, mlo, bsu, sau, lla, spn, cac, mge, mtu, ctr, bbu, syn, aae, mja, afu, pho, ape"
-	def CurlKaas(self,FastaFile,MissionName,Mail,Org,Way,ResultFileName,Type):
-		self.ResultFileName=ResultFileName
 		self.Mail=Mail
-		self.jobid="no"
+		self.jobid=jobid
+		self.ResultFileName=ResultFileName
+	def CurlKaas(self,FastaFile,MissionName,Org,Way,Type):
+		#self.ResultFileName=ResultFileName
+		#self.Mail=Mail
+		#self.jobid="no"
 		register_openers() #must need
 		if Type=="p":
-			datagen, headers = multipart_encode({"file": open(FastaFile,"rb"),"uptype":"q_file","qname":MissionName,"mail":Mail,"dbmode":"manual","org_list":Org,"way":Way,"mode":"compute"})
+			datagen, headers = multipart_encode({"file": open(FastaFile,"rb"),"uptype":"q_file","qname":MissionName,"mail":self.Mail,"dbmode":"manual","org_list":Org,"way":Way,"mode":"compute"})
 		elif Type=="n":
-			datagen, headers = multipart_encode({"file": open(FastaFile,"rb"),"peptide2":"n","uptype":"q_file","qname":MissionName,"mail":Mail,"dbmode":"manual","org_list":Org,"way":Way,"mode":"compute"})
+			datagen, headers = multipart_encode({"file": open(FastaFile,"rb"),"peptide2":"n","uptype":"q_file","qname":MissionName,"mail":self.Mail,"dbmode":"manual","org_list":Org,"way":Way,"mode":"compute"})
 		request = urllib2.Request("http://www.genome.jp/kaas-bin/kaas_main/kaas_main", datagen, headers)
 		fd=urllib2.urlopen(request)
 		for x in fd.readlines():
@@ -68,6 +71,7 @@ class CurlWeb:
 	def GetKaasStatistics(self):
 		fr=open(self.ResultFileName+".stat","w")
 		l=urllib2.urlopen("http://www.genome.jp/kaas-bin/kaas_main?mode=map&id=%s&mail=%s"%(self.jobid,self.Mail)).read()#need change
+		#print l
 		p=re.compile("<input type=\"hidden\" name=\"unclassified\" value=\"(.*?)\">",re.S) #match \n
 		m=p.search(l)
 		k=m.group(1)
@@ -76,6 +80,7 @@ class CurlWeb:
 		datagen, headers = multipart_encode({"org_name":"ko","sort":"pathway","default":"#bfffbf","reference":"white","unclassified":k})
 		request = urllib2.Request("http://www.genome.jp/kegg-bin/color_pathway_object", datagen, headers)
 		fd=urllib2.urlopen(request).readlines()
+		#print fd
 		for x in fd:
 			x=x.rstrip()
 			if "_map" in x:
@@ -87,10 +92,10 @@ class CurlWeb:
 				l=soup.findAll("a")
 				fr.write(l[0].text+"\t"+x.split("</a>")[1].strip()+"\n")
 		fr.close()
-	def FormatResults(self,ResultFileName):
-		fg=open(ResultFileName+".gmt","w")
-		fc=open(ResultFileName+".stat.change","w")
-		os.system("tar -xzvf %s"%(ResultFileName+".tar.gz"))
+	def FormatResults(self):
+		fg=open(self.ResultFileName+".gmt","w")
+		fc=open(self.ResultFileName+".stat.change","w")
+		os.system("tar -xzvf %s"%(self.ResultFileName+".tar.gz"))
 		dg={}
 		dd={}
 		for x in open("map/query.ko"):
@@ -101,7 +106,7 @@ class CurlWeb:
 					dg[l[1]]=[l[0]]
 				else:
 					dg[l[1]].append(l[0])
-		for x in open(ResultFileName+".stat"):
+		for x in open(self.ResultFileName+".stat"):
 			x=x.rstrip()
 			m=re.search("^#",x)
 			if not m:
@@ -127,15 +132,15 @@ class CurlWeb:
 if __name__=="__main__":
 	def KaasOption():
 		print "\n-h\thelp"
-		print "-f\tfasta file #requires"
-		print "-n\tMission name Default:query"
-		print "-m\tE-mail #requires"
-		print "-l\torganisms list(fungi,gene,euk,pro) Default:fungi"
-		print "-w\tAssignment method(b:BBH(bi-directional best hit),s:SBH(single-directional best hit)) Default:b"
+		print "-f\tfasta file #!!"
+		print "-n\tMission name DF:query"
+		print "-m\tE-mail DF:ngsplatform@163.com"
+		print "-l\torganisms list(fungi,gene,euk,pro) DF:fungi"
+		print "-w\tAssignment method(b:BBH(bi-directional best hit),s:SBH(single-directional best hit)) DF:b"
 		print "-g\tcustom organisms list file(opt)"
-		print "-t\tprotein or nucleic(p,n) Default:p"
-		print "-o\toutput file Default:results"
-		print "--justformat\tjust format result.gmt and result.stat.change,not execute kegg(y,n) Default:n\n"
+		print "-t\tprotein or nucleic(p,n) DF:p"
+		print "-o\toutput file DF:results"
+		print "--justformat\tjust do format result.gmt and result.stat.change,not do kegg(y,n) DF:n\n"
 		print "example:kaas.py -f t.fasta -t p -n test -m test@126.com -l fungi -w b --justformat n -o test\n\n\tkaas.py -f t.fasta -t p -n test -m test@126.com -g org.txt -w b --justformat n -o test\n\njust do format:kaas.py --justformat y -o result\n"
 		print "Note:custom organisms list file must have one line like this:hsa, dme, cel, ath\n\n\tthe final result are test.stat, test.tar.gz,test.gmt,test.stat.change\n"
 		sys.exit()
@@ -145,7 +150,7 @@ if __name__=="__main__":
 		KaasOption()
 	FastaFile=""
 	MissionName="query"
-	Email=""
+	Email="ngsplatform@163.com"
 	Org="fungi"
 	Way="b"
 	OutPut="results"
@@ -168,9 +173,6 @@ if __name__=="__main__":
 		elif name=="-m":
 			if value!="":
 				Email=value
-			else:
-				print "Email is empty"
-				KaasOption()
 		elif name=="-l":
 			if not value in ["fungi","gene","euk","pro"]:
 				print "-l must be gene,euk,pro or fungi"
@@ -203,11 +205,11 @@ if __name__=="__main__":
 			if value!="":
 				OutPut=value
 	if Format=="y":
-		p=CurlWeb()
-		p.FormatResults(OutPut)
+		p=CurlWeb(Mail=Email,ResultFileName=OutPut)
+		p.FormatResults()
 	elif FastaFile and MissionName and Email and Org and Way and OutPut and Type:
 		print " ".join(sys.argv)
-		p=CurlWeb()
+		p=CurlWeb(Mail=Email,ResultFileName=OutPut)
 		if Org=="gene":
 			Org=p.gene
 		elif Org=="euk":
@@ -216,10 +218,10 @@ if __name__=="__main__":
 			Org=p.pro
 		elif Org=="fungi":
 			Org=p.fungi
-		p.CurlKaas(FastaFile,MissionName,Email,Org,Way,OutPut,Type)
+		p.CurlKaas(FastaFile,MissionName,Org,Way,Type)
 		print p.jobid
 		p.GetKaasResults()
 		p.GetKaasStatistics()
-		p.FormatResults(OutPut)
+		p.FormatResults()
 	else:
 		KaasOption()
