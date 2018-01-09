@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/env python
 from poster.encode import multipart_encode
 from poster.streaminghttp import register_openers
 import urllib2,urllib,re,time,getopt,sys,BeautifulSoup,os
