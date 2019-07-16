@@ -62,16 +62,16 @@ class CurlWeb:
 		#print k
 		register_openers()
 		datagen, headers = multipart_encode({"org_name":"ko","sort":"pathway","default":"#bfffbf","reference":"white","unclassified":k})
-		request = urllib2.Request("http://www.genome.jp/kegg-bin/color_pathway_object", datagen, headers)
+		request = urllib2.Request("https://www.genome.jp/kegg-bin/color_pathway_object", datagen, headers)
 		fd=urllib2.urlopen(request).readlines()
 		#print fd
 		self.PathWayUrlList=[]
 		for x in fd:
 			x=x.rstrip()
-			if "_map" in x:
+			if "show_pathway" in x:
 				soup=BeautifulSoup.BeautifulSoup(x)
 				l=soup.findAll("a")
-				fr.write("#"+l[0].text+"\t"+l[1].text+"\n")
+				fr.write("#"+l[0].text+" "+x.split("</a>")[1].split("&nbsp;")[0]+"\t"+l[1].text+"\n")
 				PngName=l[0].get('href').split("/")[-1].split(".")[0]
 				self.PathWayUrlList.append(["http://www.genome.jp"+l[0].get('href'),PngName])
 			elif "_bget" in x:
