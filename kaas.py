@@ -130,11 +130,11 @@ class CurlWeb:
 				dd[pa]=[]
 		for x in dd:
 			print x,len(dd[x])
-			l=x.split("_")
+			l=x.split("__")
 			g=[]
 			for y in dd[x]:
 				g+=dg[y]
-			fm="_".join(l[1:])+"\t"+l[0]+"\t"+"\t".join(g)
+			fm=l[1]+"\t"+l[0]+"\t"+"\t".join(g)
 			fg.write(fm+"\n")
 		fc.close()
 		fg.close()
