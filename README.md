@@ -8,7 +8,7 @@
 
 ### Install
 ```
-git clone git@github.com:PEHGP/kaas.git
+git clone https://github.com/PEHGP/kaas.git
 ```
 if you don't install git.You can download kaas [here](https://github.com/PEHGP/kaas/archive/master.zip).
 
